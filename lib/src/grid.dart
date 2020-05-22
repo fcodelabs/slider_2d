@@ -4,32 +4,30 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-class Grid extends CustomPainter {
-  final Color background;
-  final Paint _backP;
-  final bool showAxis;
-  final Color axisColor;
-  final Paint _axisP;
-  final bool showGrid;
-  final Color gridColor;
-  final Paint _gridP;
-  final int gridCount;
+import 'grid_theme.dart';
 
+/// {@template grid}
+/// 2D grid is generated here. Attributes of the [Grid] can be changed by
+/// providing a [theme]. Slider can be moved only inside this area.
+/// {@endtemplate}
+class Grid extends CustomPainter {
+  /// [GridTheme] that will be used to generate this [Grid].
+  final GridTheme theme;
+
+  final Paint _backP;
+  final Paint _axisP;
+  final Paint _gridP;
+
+  /// {@macro grid}
   Grid({
-    @required this.background,
-    this.showAxis = false,
-    this.axisColor = Colors.black54,
-    this.showGrid = false,
-    this.gridColor = Colors.black38,
-    this.gridCount = 3,
-  })  : assert(gridCount >= 0),
-        _backP = Paint()..color = background,
+    @required this.theme,
+  })  : _backP = Paint()..color = theme.background,
         _axisP = Paint()
-          ..color = axisColor
+          ..color = theme.axisColor
           ..strokeWidth = 1
           ..strokeCap = StrokeCap.round,
         _gridP = Paint()
-          ..color = gridColor
+          ..color = theme.gridColor
           ..strokeWidth = 0.6
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round;
@@ -42,8 +40,8 @@ class Grid extends CustomPainter {
     final dSx = dashSpace * cos(delta.direction);
     final dSy = dashSpace * sin(delta.direction);
 
-    Offset next = Offset(start.dx + dWx, start.dy + dWy);
-    bool line = true;
+    var next = Offset(start.dx + dWx, start.dy + dWy);
+    var line = true;
     while (end.distance >= next.distance) {
       canvas.drawLine(start, next, line ? foreground : background);
       line = !line;
@@ -61,9 +59,9 @@ class Grid extends CustomPainter {
     final dashArc = dashLength / r;
     final spaceArc = spaceLength / r;
 
-    double start = 0;
-    double next = dashArc;
-    bool line = true;
+    var start = 0.0;
+    var next = dashArc;
+    var line = true;
     while (next <= 2 * pi) {
       canvas.drawArc(Rect.fromCircle(center: center, radius: r), start,
           line ? dashArc : spaceArc, false, line ? foreground : background);
@@ -84,16 +82,16 @@ class Grid extends CustomPainter {
       _backP,
     );
 
-    if (showAxis) {
+    if (theme.showAxis) {
       _drawLine(canvas, Offset(0, size.height / 2),
           Offset(size.width, size.height / 2), 2, 4, _axisP, _backP);
       _drawLine(canvas, Offset(size.width / 2, 0),
           Offset(size.width / 2, size.height), 2, 4, _axisP, _backP);
     }
 
-    if (showGrid) {
-      for (int i = 1; i < gridCount + 1; i++) {
-        final ratio = 0.5 * i / (gridCount + 1);
+    if (theme.showGrid) {
+      for (var i = 1; i < theme.gridCount + 1; i++) {
+        final ratio = 0.5 * i / (theme.gridCount + 1);
         _drawCircle(canvas, Offset(size.width / 2, size.height / 2),
             ratio * size.width, 2, 4, _gridP, _backP);
       }
@@ -101,10 +99,5 @@ class Grid extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(Grid oldDelegate) {
-    if (background != oldDelegate.background) {
-      return true;
-    }
-    return false;
-  }
+  bool shouldRepaint(Grid oldDelegate) => theme != oldDelegate.theme;
 }

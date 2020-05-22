@@ -6,16 +6,33 @@ import 'package:flutter/painting.dart';
 
 class Grid extends CustomPainter {
   final Color background;
+  final Paint _backP;
   final bool showAxis;
   final Color axisColor;
+  final Paint _axisP;
+  final bool showGrid;
   final Color gridColor;
+  final Paint _gridP;
+  final int gridCount;
 
   Grid({
     @required this.background,
     this.showAxis = false,
     this.axisColor = Colors.black54,
+    this.showGrid = false,
     this.gridColor = Colors.black38,
-  });
+    this.gridCount = 3,
+  })  : assert(gridCount >= 0),
+        _backP = Paint()..color = background,
+        _axisP = Paint()
+          ..color = axisColor
+          ..strokeWidth = 1
+          ..strokeCap = StrokeCap.round,
+        _gridP = Paint()
+          ..color = gridColor
+          ..strokeWidth = 0.6
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
 
   void _drawLine(Canvas canvas, Offset start, Offset end, double dashWidth,
       double dashSpace, Paint foreground, Paint background) {
@@ -62,28 +79,25 @@ class Grid extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final backP = Paint()..color = background;
     canvas.drawOval(
       Rect.fromLTWH(0, 0, size.width, size.height),
-      backP,
+      _backP,
     );
 
-    final axisP = Paint()
-      ..color = axisColor
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round;
-    _drawLine(canvas, Offset(0, size.height / 2),
-        Offset(size.width, size.height / 2), 2, 4, axisP, backP);
-    _drawLine(canvas, Offset(size.width / 2, 0),
-        Offset(size.width / 2, size.height), 2, 4, axisP, backP);
+    if (showAxis) {
+      _drawLine(canvas, Offset(0, size.height / 2),
+          Offset(size.width, size.height / 2), 2, 4, _axisP, _backP);
+      _drawLine(canvas, Offset(size.width / 2, 0),
+          Offset(size.width / 2, size.height), 2, 4, _axisP, _backP);
+    }
 
-    final gridP = Paint()
-      ..color = gridColor
-      ..strokeWidth = 0.6
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-    _drawCircle(canvas, Offset(size.width / 2, size.height / 2), size.width / 3,
-        2, 4, gridP, backP);
+    if (showGrid) {
+      for (int i = 1; i < gridCount + 1; i++) {
+        final ratio = 0.5 * i / (gridCount + 1);
+        _drawCircle(canvas, Offset(size.width / 2, size.height / 2),
+            ratio * size.width, 2, 4, _gridP, _backP);
+      }
+    }
   }
 
   @override

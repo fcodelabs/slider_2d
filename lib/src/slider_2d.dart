@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:slider/slider/grid.dart';
+
+import 'grid.dart';
 
 class Slider2D extends StatelessWidget {
   @override

@@ -9,6 +9,7 @@ import 'grid.dart';
 /// 2D grid is generated here. Attributes of the [Grid] can be changed by
 /// providing a [theme]. Slider can be moved only inside this area.
 /// {@endtemplate}
+@immutable
 class GridTheme {
   /// Background color of the [Grid].
   final Color background;

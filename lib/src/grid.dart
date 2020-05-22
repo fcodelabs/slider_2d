@@ -25,6 +25,7 @@ class Grid extends CustomPainter {
         _axisP = Paint()
           ..color = theme.axisColor
           ..strokeWidth = 1
+          ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round,
         _gridP = Paint()
           ..color = theme.gridColor
@@ -32,8 +33,13 @@ class Grid extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round;
 
-  void _drawLine(Canvas canvas, Offset start, Offset end, double dashWidth,
-      double dashSpace, Paint foreground, Paint background) {
+  void _drawLine(
+    Path path,
+    Offset start,
+    Offset end,
+    double dashWidth,
+    double dashSpace,
+  ) {
     final delta = end - start;
     final dWx = dashWidth * cos(delta.direction);
     final dWy = dashWidth * sin(delta.direction);
@@ -43,7 +49,12 @@ class Grid extends CustomPainter {
     var next = Offset(start.dx + dWx, start.dy + dWy);
     var line = true;
     while (end.distance >= next.distance) {
-      canvas.drawLine(start, next, line ? foreground : background);
+      if (line) {
+        path.moveTo(start.dx, start.dy);
+        path.lineTo(next.dx, next.dy);
+      } else {
+        path.moveTo(next.dx, next.dy);
+      }
       line = !line;
       start = next;
       if (line) {
@@ -54,8 +65,13 @@ class Grid extends CustomPainter {
     }
   }
 
-  void _drawCircle(Canvas canvas, Offset center, double r, double dashLength,
-      double spaceLength, Paint foreground, Paint background) {
+  void _drawCircle(
+    Path path,
+    Offset center,
+    double r,
+    double dashLength,
+    double spaceLength,
+  ) {
     final dashArc = dashLength / r;
     final spaceArc = spaceLength / r;
 
@@ -63,8 +79,9 @@ class Grid extends CustomPainter {
     var next = dashArc;
     var line = true;
     while (next <= 2 * pi) {
-      canvas.drawArc(Rect.fromCircle(center: center, radius: r), start,
-          line ? dashArc : spaceArc, false, line ? foreground : background);
+      if (line) {
+        path.addArc(Rect.fromCircle(center: center, radius: r), start, dashArc);
+      }
       line = !line;
       start = next;
       if (line) {
@@ -83,18 +100,22 @@ class Grid extends CustomPainter {
     );
 
     if (theme.showAxis) {
-      _drawLine(canvas, Offset(0, size.height / 2),
-          Offset(size.width, size.height / 2), 2, 4, _axisP, _backP);
-      _drawLine(canvas, Offset(size.width / 2, 0),
-          Offset(size.width / 2, size.height), 2, 4, _axisP, _backP);
+      final path = Path();
+      _drawLine(path, Offset(0, size.height / 2),
+          Offset(size.width, size.height / 2), 2, 4);
+      _drawLine(path, Offset(size.width / 2, 0),
+          Offset(size.width / 2, size.height), 2, 4);
+      canvas.drawPath(path, _axisP);
     }
 
     if (theme.showGrid) {
+      final path = Path();
       for (var i = 1; i < theme.gridCount + 1; i++) {
         final ratio = 0.5 * i / (theme.gridCount + 1);
-        _drawCircle(canvas, Offset(size.width / 2, size.height / 2),
-            ratio * size.width, 2, 4, _gridP, _backP);
+        _drawCircle(path, Offset(size.width / 2, size.height / 2),
+            ratio * size.width, 2, 4);
       }
+      canvas.drawPath(path, _gridP);
     }
   }
 

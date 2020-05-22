@@ -13,10 +13,13 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(width: double.infinity),
-          SizedBox(
-            height: 200,
-            width: 200,
-            child: Slider2D(),
+          Slider2D(
+            length: 200,
+            gridTheme: GridTheme(
+              background: Colors.green[100],
+              showGrid: true,
+              showAxis: true,
+            ),
           ),
         ],
       ),

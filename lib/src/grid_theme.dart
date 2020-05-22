@@ -37,4 +37,27 @@ class GridTheme {
     this.gridColor = Colors.black38,
     this.gridCount = 3,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GridTheme &&
+              runtimeType == other.runtimeType &&
+              background == other.background &&
+              showAxis == other.showAxis &&
+              axisColor == other.axisColor &&
+              showGrid == other.showGrid &&
+              gridColor == other.gridColor &&
+              gridCount == other.gridCount;
+
+  @override
+  int get hashCode =>
+      background.hashCode ^
+      showAxis.hashCode ^
+      axisColor.hashCode ^
+      showGrid.hashCode ^
+      gridColor.hashCode ^
+      gridCount.hashCode;
+
+
 }

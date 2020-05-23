@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:slider2d/src/grid_value.dart';
 
 import 'grid.dart';
 import 'grid_theme.dart';
@@ -24,6 +25,7 @@ class Slider2D extends StatelessWidget {
   final double length;
   final double pointerLength;
   final PointerBuilder pointerBuilder;
+  final ValueChanged<GridValue> onChange;
 
   final _position = ValueNotifier<Offset>(null);
   final _dragging = ValueNotifier(false);
@@ -32,6 +34,7 @@ class Slider2D extends StatelessWidget {
   Slider2D({
     Key key,
     @required this.gridTheme,
+    @required this.onChange,
     this.pointerBuilder,
     this.length,
     this.pointerLength,
@@ -45,7 +48,7 @@ class Slider2D extends StatelessWidget {
     final dl = pointerLength / 2;
     final center = Offset(length / 2, length / 2);
     if (_position.value == null) {
-      _position.value = center;
+      _changeValue(center, center, length, dl);
     }
 
     return Center(
@@ -87,13 +90,13 @@ class Slider2D extends StatelessWidget {
             ),
             GestureDetector(
               onPanStart: (details) {
-                _update(details.localPosition, center, dl);
+                _update(details.localPosition, center, length, dl);
                 _dragging.value = true;
               },
               onPanUpdate: (details) =>
-                  _update(details.localPosition, center, dl),
+                  _update(details.localPosition, center, length, dl),
               onPanEnd: (details) {
-                _update(_position.value, center, dl);
+                _update(_position.value, center, length, dl);
                 _dragging.value = false;
               },
             ),
@@ -103,18 +106,31 @@ class Slider2D extends StatelessWidget {
     );
   }
 
-  void _update(Offset value, Offset center, double dl) {
+  void _update(Offset value, Offset center, double length, double dl) {
     final vector = value - center;
     final limit = (length / 2) - dl;
-    if (vector.distance.abs() > limit) {
+    if (vector.distance > limit) {
       value = Offset(
-        limit * cos(vector.direction),
-        limit * sin(vector.direction),
-      ) + center;
+            limit * cos(vector.direction),
+            limit * sin(vector.direction),
+          ) +
+          center;
     }
-    final delta = (_position.value - value).distance.abs();
+    final delta = (_position.value - value).distance;
     if (delta > 0) {
-      _position.value = value;
+      _changeValue(value, center, length, dl);
     }
+  }
+
+  void _changeValue(Offset value, Offset center, double length, double dl) {
+    final vector = value - center;
+    final limit = (length / 2) - dl;
+    onChange?.call(GridValue(
+      x: vector.dx / limit,
+      y: vector.dy / limit,
+      r: vector.distance / limit,
+      teta: vector.direction,
+    ));
+    _position.value = value;
   }
 }

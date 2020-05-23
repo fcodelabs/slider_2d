@@ -26,10 +26,39 @@ class Pointer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deco = BoxDecoration(
+      color: isMoving ? Colors.blueAccent : Colors.blue[900],
+      shape: BoxShape.circle,
+    );
+    final trans = BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.circle,
+    );
     return Container(
       height: length,
       width: length,
-      color: isMoving ? Colors.blueAccent : Colors.blue[900],
+      decoration: deco,
+      child: Center(
+        child: Container(
+          height: length/2 + 1,
+          width: length/2 + 1,
+          decoration: trans,
+          child: Center(
+            child: Container(
+              height: length/2 - 1,
+              width: length/2 - 1,
+              decoration: deco,
+              child: Center(
+                child: Container(
+                  height: 2,
+                  width: 2,
+                  decoration: trans,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

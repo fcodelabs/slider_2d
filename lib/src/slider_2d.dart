@@ -24,9 +24,9 @@ class Slider2D extends StatelessWidget {
   final double length;
   final double pointerLength;
   final PointerBuilder pointerBuilder;
-  final ValueNotifier<Offset> _position;
+
+  final _position = ValueNotifier<Offset>(null);
   final _dragging = ValueNotifier(false);
-  final Offset _center;
 
   /// {@macro slider_2d}
   Slider2D({
@@ -35,9 +35,7 @@ class Slider2D extends StatelessWidget {
     this.pointerBuilder,
     this.length,
     this.pointerLength,
-  })  : _position = ValueNotifier<Offset>(Offset(length / 2, length / 2)),
-        _center = Offset(length / 2, length / 2),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +43,10 @@ class Slider2D extends StatelessWidget {
     final length = this.length ?? min(size.height, size.width);
     final pointerLength = this.pointerLength ?? 24;
     final dl = pointerLength / 2;
+    final center = Offset(length / 2, length / 2);
+    if (_position.value == null) {
+      _position.value = center;
+    }
 
     return Center(
       child: SizedBox(
@@ -56,15 +58,15 @@ class Slider2D extends StatelessWidget {
             Positioned.fill(
               child: Center(
                 child: SizedBox(
-                  height: length - dl,
-                  width: length - dl,
+                  height: length - pointerLength,
+                  width: length - pointerLength,
                   child: CustomPaint(
                     painter: Grid(theme: gridTheme),
                   ),
                 ),
               ),
             ),
-            ValueListenableBuilder(
+            ValueListenableBuilder<Offset>(
               valueListenable: _position,
               child: ValueListenableBuilder(
                 valueListenable: _dragging,
@@ -73,6 +75,9 @@ class Slider2D extends StatelessWidget {
                     Pointer(length: pointerLength, isMoving: value),
               ),
               builder: (context, value, child) {
+                if (value == null) {
+                  return Container();
+                }
                 return Positioned(
                   left: value.dx - dl,
                   top: value.dy - dl,
@@ -81,9 +86,16 @@ class Slider2D extends StatelessWidget {
               },
             ),
             GestureDetector(
-              onPanStart: (details) => _update(details.localPosition, true),
-              onPanUpdate: (details) => _update(details.localPosition),
-              onPanEnd: (details) => _update(_position.value, false),
+              onPanStart: (details) {
+                _update(details.localPosition, center, dl);
+                _dragging.value = true;
+              },
+              onPanUpdate: (details) =>
+                  _update(details.localPosition, center, dl),
+              onPanEnd: (details) {
+                _update(_position.value, center, dl);
+                _dragging.value = false;
+              },
             ),
           ],
         ),
@@ -91,15 +103,17 @@ class Slider2D extends StatelessWidget {
     );
   }
 
-  void _update(Offset value, [bool isMoving]) {
-    if (isMoving != null) {
-      _dragging.value = isMoving;
+  void _update(Offset value, Offset center, double dl) {
+    final vector = value - center;
+    final limit = (length / 2) - dl;
+    if (vector.distance.abs() > limit) {
+      value = Offset(
+        limit * cos(vector.direction),
+        limit * sin(vector.direction),
+      ) + center;
     }
-    if ((_center - value).distance.abs() > length / 2) {
-      return;
-    }
-    final distance = (_position.value - value).distance.abs();
-    if (distance > 8) {
+    final delta = (_position.value - value).distance.abs();
+    if (delta > 0) {
       _position.value = value;
     }
   }

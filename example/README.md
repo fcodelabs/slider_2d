@@ -1,6 +1,6 @@
-# slider
+# 2D Slider Example
 
-A 2D slider for flutter
+An example project for 2D slider for flutter
 
 ## Getting Started
 

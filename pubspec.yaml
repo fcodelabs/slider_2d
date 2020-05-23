@@ -1,8 +1,9 @@
 name: slider2d
-description: A 2D slider for Flutter
-version: 0.0.1
-author:
-homepage:
+description: A 2D slider with circular grid for Flutter. Used to select from range of 2 dimensional values.
+version: 0.1.0
+repository: https://github.com/fcodelabs/slider_2d
+issue_tracker: https://github.com/fcodelabs/slider_2d/issues
+homepage: https://www.fcodelabs.com
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

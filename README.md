@@ -1,14 +1,17 @@
-# slider2d
+# 2 Dimension Slider for Flutter
 
-A 2D slider for Flutter
+A 2D slider with circular grid for Flutter. Used to select from range  
+of 2 dimensional values.
 
-## Getting Started
+For more information about Fcode Labs visit:
+[www.fcodelabs.com](https://www.fcodelabs.com).
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+Email us:
+[hello@fcodelabs.com](mailto:hello@fcodelabs.com?subject=Help%20on%202D%20Slider)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+
+[![Pub](https://img.shields.io/pub/v/slider_2d.svg)](https://pub.dev/packages/slider_2d)
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
+[![Star on GitHub](https://img.shields.io/github/stars/fcodelabs/slider_2d.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/fcodelabs/slider_2d)
+[![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+

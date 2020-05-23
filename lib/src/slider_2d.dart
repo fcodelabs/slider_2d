@@ -19,12 +19,40 @@ typedef PointerBuilder = Widget Function(
 );
 
 /// {@template slider_2d}
+/// A 2 Dimensional slider that can be used to pick values from
+/// a 2 dimensional grid.
+///
+/// Value of the slider can be obtained as cartesian coordinates
+/// or polar coordinates. The position is wrapped in [GridValue].
+/// Maximum and minimum values of this slider is -1 and +1. Regardless
+/// the [length] of the [Slider2D], the value of [Slider2D] is in
+/// between -1 and +1.
+///
+/// See also:
+///
+///  * [Grid] - Used to generate the place that pointer is moving
+///  * [GridTheme] - Theme that is used in the [Grid]
+///  * [GridValue] - Position of the pointer in the grid
+///  * [Pointer] - Default pointer that is used in the [Grid].
+///  Can be override with [pointerBuilder].
 /// {@endtemplate}
 class Slider2D extends StatelessWidget {
+  /// Theme that is used in [Grid] which is used to generate the
+  /// plane that the pointer is moving
   final GridTheme gridTheme;
+
+  /// Height and width of this [Slider2D] is equal to [length].
   final double length;
+
+  /// Height and width of the pointer on the [Grid] is equal to this value.
   final double pointerLength;
+
+  /// By providing this builder, you can change the default [Pointer]
+  /// that is shown in the [Grid].
   final PointerBuilder pointerBuilder;
+
+  /// This function is called whenever the position of the pointer changed.
+  /// This is called with [GridValue] which wraps the position coordinates.
   final ValueChanged<GridValue> onChange;
 
   final _position = ValueNotifier<Offset>(null);

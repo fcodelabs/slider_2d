@@ -5,16 +5,18 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 class GridValue {
-
   /// x coordinate of the pointer
   /// Value is always between -1 and +1
   final double x;
+
   /// y coordinate of the pointer
   /// Value is always between -1 and +1
   final double y;
+
   /// Distance to the pointer from the center
   /// Value is always between -1 and +1
   final double r;
+
   /// Angle to line formed by joining the location of the pointer and the
   /// center, from the x-axis.
   /// Value is always between -pi and +pi

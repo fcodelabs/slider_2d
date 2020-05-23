@@ -42,14 +42,14 @@ class GridTheme {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GridTheme &&
-              runtimeType == other.runtimeType &&
-              background == other.background &&
-              showAxis == other.showAxis &&
-              axisColor == other.axisColor &&
-              showGrid == other.showGrid &&
-              gridColor == other.gridColor &&
-              gridCount == other.gridCount;
+      other is GridTheme &&
+          runtimeType == other.runtimeType &&
+          background == other.background &&
+          showAxis == other.showAxis &&
+          axisColor == other.axisColor &&
+          showGrid == other.showGrid &&
+          gridColor == other.gridColor &&
+          gridCount == other.gridCount;
 
   @override
   int get hashCode =>
@@ -59,6 +59,4 @@ class GridTheme {
       showGrid.hashCode ^
       gridColor.hashCode ^
       gridCount.hashCode;
-
-
 }

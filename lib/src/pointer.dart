@@ -40,13 +40,13 @@ class Pointer extends StatelessWidget {
       decoration: deco,
       child: Center(
         child: Container(
-          height: length/2 + 1,
-          width: length/2 + 1,
+          height: length / 2 + 1,
+          width: length / 2 + 1,
           decoration: trans,
           child: Center(
             child: Container(
-              height: length/2 - 1,
-              width: length/2 - 1,
+              height: length / 2 - 1,
+              width: length / 2 - 1,
               decoration: deco,
               child: Center(
                 child: Container(

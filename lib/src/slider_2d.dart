@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:slider2d/src/grid_value.dart';
 
 import 'grid.dart';
 import 'grid_theme.dart';
+import 'grid_value.dart';
 import 'pointer.dart';
 
 /// This will generate a [Widget] that will be used as the pointer of this
@@ -127,9 +127,9 @@ class Slider2D extends StatelessWidget {
     final limit = (length / 2) - dl;
     onChange?.call(GridValue(
       x: vector.dx / limit,
-      y: vector.dy / limit,
+      y: -vector.dy / limit,
       r: vector.distance / limit,
-      teta: vector.direction,
+      teta: -vector.direction,
     ));
     _position.value = value;
   }

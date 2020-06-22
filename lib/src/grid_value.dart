@@ -32,11 +32,11 @@ class GridValue {
 
   /// {@macro grid_val}
   GridValue({
-    this.x=0,
-    this.y=0,
-    this.r=0,
-    this.teta=0,
-    this.moving=false,
+    this.x = 0,
+    this.y = 0,
+    this.r = 0,
+    this.teta = 0,
+    this.moving = false,
   });
 
   /// Generate a new value from [x] and [y] values. [moving] will be

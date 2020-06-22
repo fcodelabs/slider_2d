@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slider2d/slider2d.dart';
 
 class HomePage extends StatelessWidget {
-  final _gridValue = ValueNotifier<GridValue>(null);
+  final _sliderController = SliderController.withPolar(r: 0.4, teta: 1.2);
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +16,12 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           Slider2D(
             length: 200,
+            controller: _sliderController,
             gridTheme: GridTheme(
               background: Colors.blue[100],
               showGrid: true,
               showAxis: true,
             ),
-            onChange: (value) => _gridValue.value = value,
           ),
           SizedBox(
             width: double.infinity,
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(width: 16),
               ValueListenableBuilder<GridValue>(
-                valueListenable: _gridValue,
+                valueListenable: _sliderController,
                 builder: (context, value, _) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

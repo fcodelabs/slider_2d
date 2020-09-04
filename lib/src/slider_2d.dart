@@ -9,14 +9,13 @@ import 'pointer.dart';
 import 'slider_controller.dart';
 
 /// This will generate a [Widget] that will be used as the pointer of this
-/// slider given the [BuildContext], whether the pointer is moving or not
-/// and pointer's size.
+/// slider given the [BuildContext]. You might need to access the controller
+/// of the slider in order to get in detail information about the user
+/// gestures and slider states.
 ///
 /// [Pointer] is used as default pointer.
 typedef PointerBuilder = Widget Function(
   BuildContext context,
-  double length,
-  bool isMoving,
 );
 
 /// {@template slider_2d}
@@ -108,14 +107,18 @@ class Slider2D extends StatelessWidget {
                 return Positioned(
                   left: offset.dx - dl,
                   top: offset.dy - dl,
-                  child: pointerBuilder?.call(
-                          context, pointerLength, value.moving) ??
-                      Pointer(length: pointerLength, isMoving: value.moving),
+                  child: pointerBuilder?.call(context) ??
+                      Pointer(
+                        length: pointerLength,
+                        isMoving: value.moving,
+                        enabled: _controller.enabled,
+                      ),
                 );
               },
             ),
             GestureDetector(
               onPanStart: (details) {
+                if (!_controller.enabled) return;
                 final gridValue = _toGrid(
                   details.localPosition,
                   center,
@@ -125,6 +128,7 @@ class Slider2D extends StatelessWidget {
                 _controller.value = gridValue.copyWith(moving: true);
               },
               onPanUpdate: (details) {
+                if (!_controller.enabled) return;
                 final gridValue = _toGrid(
                   details.localPosition,
                   center,
@@ -133,8 +137,10 @@ class Slider2D extends StatelessWidget {
                 );
                 _controller.value = gridValue.copyWith(moving: true);
               },
-              onPanEnd: (details) =>
-                  _controller.value = _controller.value.copyWith(moving: false),
+              onPanEnd: (details) {
+                if (!_controller.enabled) return;
+                _controller.value = _controller.value.copyWith(moving: false);
+              },
             ),
           ],
         ),

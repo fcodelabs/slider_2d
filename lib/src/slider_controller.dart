@@ -36,9 +36,11 @@ class SliderController extends ValueNotifier<GridValue> {
   SliderController.withPolar({double r, double teta})
       : super(GridValue.fromPolar(r: r, teta: teta));
 
-  /// When [true], the Slider will move according to the gestures.
-  /// Set this to [false] to disable the slider.
-  bool enabled = true;
+  /// Get whether this slider is enabled or not
+  bool get enabled => value.enabled;
+
+  /// Set whether this slider is enabled or not
+  set enabled(bool enabled) => value.copyWith(enabled: enabled);
 
   /// Get the x coordinate of the slider pointer
   double get x => value.x;

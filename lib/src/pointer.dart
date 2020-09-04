@@ -17,17 +17,23 @@ class Pointer extends StatelessWidget {
   /// to be equal to this value.
   final double length;
 
+  /// True if the [Pointer] is enabled. False otherwise.
+  final bool enabled;
+
   /// {@macro pointer}
   const Pointer({
     Key key,
     @required this.length,
     @required this.isMoving,
+    @required this.enabled,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final deco = BoxDecoration(
-      color: isMoving ? Colors.blueAccent : Colors.blue[900],
+      color: enabled
+          ? isMoving ? Colors.blueAccent : Colors.blue[900]
+          : Colors.grey,
       shape: BoxShape.circle,
     );
     final trans = BoxDecoration(

@@ -30,6 +30,12 @@ class GridValue {
   /// True if moving and false otherwise
   final bool moving;
 
+  /// Indicate whether the slider is enabled or not. True if enabled and
+  /// false otherwise.
+  ///
+  /// When the slider is not enabled, all user interactions are omitted.
+  final bool enabled;
+
   /// {@macro grid_val}
   GridValue({
     this.x = 0,
@@ -37,6 +43,7 @@ class GridValue {
     this.r = 0,
     this.teta = 0,
     this.moving = false,
+    this.enabled = true,
   });
 
   /// Generate a new value from [x] and [y] values. [moving] will be
@@ -45,6 +52,7 @@ class GridValue {
     final vector = Offset(x, y);
     final teta = vector.direction;
     final r = min(1.0, vector.distance);
+    // If x or y > 1, the following call will fix it
     return GridValue.fromPolar(r: r, teta: teta);
   }
 
@@ -56,7 +64,6 @@ class GridValue {
       y: r * sin(teta),
       r: r,
       teta: teta,
-      moving: false,
     );
   }
 
@@ -68,6 +75,7 @@ class GridValue {
     double r,
     double teta,
     bool moving,
+    bool enabled,
   }) {
     return GridValue(
       x: x ?? this.x,
@@ -75,6 +83,7 @@ class GridValue {
       r: r ?? this.r,
       teta: teta ?? this.teta,
       moving: moving ?? this.moving,
+      enabled: enabled ?? this.enabled,
     );
   }
 
@@ -87,9 +96,15 @@ class GridValue {
           y == other.y &&
           r == other.r &&
           teta == other.teta &&
-          moving == other.moving;
+          moving == other.moving &&
+          enabled == other.enabled;
 
   @override
   int get hashCode =>
-      x.hashCode ^ y.hashCode ^ r.hashCode ^ teta.hashCode ^ moving.hashCode;
+      x.hashCode ^
+      y.hashCode ^
+      r.hashCode ^
+      teta.hashCode ^
+      moving.hashCode ^
+      enabled.hashCode;
 }

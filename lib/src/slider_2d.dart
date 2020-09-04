@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:slider2d/slider2d.dart';
 
 import 'grid.dart';
 import 'grid_theme.dart';
 import 'grid_value.dart';
 import 'pointer.dart';
+import 'slider_controller.dart';
 
 /// This will generate a [Widget] that will be used as the pointer of this
 /// slider given the [BuildContext], whether the pointer is moving or not

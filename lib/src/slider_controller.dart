@@ -25,8 +25,6 @@ import 'slider_2d.dart';
 ///  Can be override with [pointerBuilder].
 /// {@endtemplate}
 class SliderController extends ValueNotifier<GridValue> {
-  // TODO: Update this controller as TextEditingController.
-
   /// {@macro slider_ctrl}
   SliderController() : super(GridValue());
 
@@ -37,4 +35,32 @@ class SliderController extends ValueNotifier<GridValue> {
   /// Creates a controller with polar coordinates
   SliderController.withPolar({double r, double teta})
       : super(GridValue.fromPolar(r: r, teta: teta));
+
+  /// When [true], the Slider will move according to the gestures.
+  /// Set this to [false] to disable the slider.
+  bool enabled = true;
+
+  /// Get the x coordinate of the slider pointer
+  double get x => value.x;
+
+  /// Set the x coordinate of the slider pointer
+  set x(double x) => value = value.copyWith(x: x);
+
+  /// Get the y coordinate of the slider pointer
+  double get y => value.y;
+
+  /// Set the y coordinate of the slider pointer
+  set y(double y) => value = value.copyWith(y: y);
+
+  /// Get the distance to the slider pointer from the center
+  double get r => value.r;
+
+  /// Set the distance to the slider pointer from the center
+  set r(double r) => value = value.copyWith(r: r);
+
+  /// Get the angle to the pointer from the x-axis
+  double get teta => value.teta;
+
+  /// Set the angle to the pointer from the x-axis
+  set teta(double teta) => value = value.copyWith(teta: teta);
 }
